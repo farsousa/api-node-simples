@@ -2,14 +2,18 @@ import { Request, Response } from 'express'
 import { User } from '../entities/user.entity'
 
 export async function createUser(request: Request, response: Response) {
-    const { name, age, weight } = request.body
+    const { email, password } = request.body
     
     const user = new User()
-    user.name = name
-    user.age = age
-    user.weight = weight
+    user.email = email
+    user.password = password
+    user.hashPassword()
 
-    await user.save()
+    try {
+        await user.save()
+    } catch(err) {
+        return response.status(409).send()
+    }
 
     return response.status(201).json(user)
 }
@@ -34,8 +38,8 @@ export async function getOneUser(request: Request, response: Response) {
 }
 
 export async function alterUser(request: Request, response: Response) {
+    const { email, password } = request.body
     const { id } = request.params
-    const { name, age, weight } = request.body
 
     const user = await User.findOne({
         where: {
@@ -45,9 +49,12 @@ export async function alterUser(request: Request, response: Response) {
 
     if (!user) return response.status(404).json()
 
-    if (name) user.name = name
-    if (age) user.age = age
-    if (weight) user.weight = weight
+    user.updatedAt = new Date()
+    if (email) user.email = email
+    if (password) {
+        user.password = password
+        user.hashPassword()
+    } 
     
     user.save()
 

@@ -1,16 +1,17 @@
-import { Router, Request, Response } from 'express'
+import { Router } from 'express'
 import { alterUser, createUser, deleteUser, getOneUser, getUsers } from '../controllers/user.controller'
+import authMiddleware from '../middlewares/auth.middleware'
 
 const routes = Router()  
 
-routes.post('/user', createUser)
+routes.post('/', createUser)
 
-routes.get('/user', getUsers)
+routes.get('/', authMiddleware, getUsers)
 
-routes.get('/user/:id', getOneUser)
+routes.get('/:id', authMiddleware, getOneUser)
 
-routes.patch('/user/:id', alterUser)
+routes.patch('/:id', authMiddleware, alterUser)
 
-routes.delete('/user/:id', deleteUser)
+routes.delete('/:id', authMiddleware, deleteUser)
 
 export default routes
