@@ -1,2 +1,10 @@
 # api-node-simples
-Esta API somente tem o CRUD de uma única entidade. Ela serve como base para compreender a criação de um serviço REST.
+Esta API REST tem o CRUD de uma única entidade. Ela serve como modelo básico para criação de projetos backend.
+
+### bibliotecas
+* express
+* typescript
+* typeorm + reflect-metadata
+* sqlite3
+* cors
+* morgan
